@@ -1,0 +1,11 @@
+{
+  "renderConcurrency": 2,
+  "jobTimeoutMs": 1800000,
+  "maxFrames": 108000,
+  "maxOutputBytes": 2147483648,
+  "keepLastJobs": 20,
+  "maxCacheBytes": 5368709120,
+  "httpPort": 3789,
+  "httpHost": "127.0.0.1",
+  "httpToken": null
+}

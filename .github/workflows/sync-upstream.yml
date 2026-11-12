@@ -1,0 +1,42 @@
+name: Track upstream Remotion release
+
+on:
+  schedule:
+    - cron: '0 3 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Read latest upstream release
+        id: latest
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG=$(gh api repos/remotion-dev/remotion/releases/latest --jq .tag_name)
+          VERSION=${TAG#v}
+          CURRENT=$(cat VERSION)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "current=$CURRENT" >> "$GITHUB_OUTPUT"
+          echo "changed=$([ "$VERSION" != "$CURRENT" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+      - name: Update pinned version and lockfile
+        if: steps.latest.outputs.changed == 'true'
+        run: node scripts/upgrade-runtime.mjs "${{ steps.latest.outputs.version }}" --no-install
+      - name: Open pull request
+        if: steps.latest.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: chore/remotion-${{ steps.latest.outputs.version }}
+          title: 'chore: bump Remotion to ${{ steps.latest.outputs.version }}'
+          body: 'Auto-generated from remotion-dev/remotion release. CI runs check + selftest; run `npm run smoke` locally before merging.'
+          commit-message: 'chore: bump Remotion to ${{ steps.latest.outputs.version }}'

@@ -1,0 +1,15 @@
+node_modules/
+dist/
+build/
+*.tsbuildinfo
+
+state/
+cache/
+workspaces/
+out/
+logs/
+*.log
+
+config.json
+.env
+.DS_Store
