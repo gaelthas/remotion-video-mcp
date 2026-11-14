@@ -16,7 +16,21 @@ node scripts/install.mjs
 
 然后：
 
-1. 把 `mcp.json.example` 里的路径改成本机绝对路径，合并进 `~/.codebuddy/mcp.json`：
+1. 把 `mcp.json.example` 里的路径改成本机绝对路径，合并进 `~/.codebuddy/mcp.json`。macOS / Linux 下 `command` 建议填 `which node` 得到的绝对路径（GUI 启动的 Agent 通常拿不到 nvm 的 PATH）：
+
+```json
+{
+  "mcpServers": {
+    "remotion": {
+      "type": "stdio",
+      "command": "/Users/you/.nvm/versions/node/v22.22.2/bin/node",
+      "args": ["/Users/you/workspace/remotion-video-mcp/server/stdio.mjs"]
+    }
+  }
+}
+```
+
+仅 Windows 才需要 `cmd /c`：
 
 ```json
 {

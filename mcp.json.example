@@ -2,11 +2,9 @@
   "mcpServers": {
     "remotion": {
       "type": "stdio",
-      "command": "cmd",
+      "command": "/absolute/path/to/node",
       "args": [
-        "/c",
-        "node",
-        "D:\\path\\to\\remotion-video-mcp\\server\\stdio.mjs"
+        "/absolute/path/to/remotion-video-mcp/server/stdio.mjs"
       ]
     }
   }
